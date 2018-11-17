@@ -1,5 +1,3 @@
-
-
 def avg_hr_specified(new_time_since, heart_rate_values):
 
     heart_rate_total = 0
