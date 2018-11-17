@@ -77,6 +77,21 @@ def is_tachycardic(user_id):
     return jsonify(tachycardic_conditions(user_id, age, last_heart_rate))
 
 
+@app.route("/api/heart_rate/average/<user_id>", methods=["GET"])
+def avg_hr(user_id):
+    from avg_heart_rate import average_hr
+    user_id = int(user_id)
+    connect("mongodb://oliviagwynn1:GODUKE10@ds157503.mlab.com:57503/bme590")
+
+    user = Patient.objects.raw({"_id": user_id}).first()
+    heart_rates = []
+
+    for data in user.heart_rate_data:
+        heart_rates.append(data["hr"])
+
+    return jsonify(average_hr(heart_rates))
+
+
 @app.route("/api/heart_rate/interval_average", methods=["POST"])
 def interval_avg():
     from avg_hr_spec import avg_hr_specified
@@ -87,7 +102,6 @@ def interval_avg():
     user = Patient.objects.raw({"_id": r["user_id"]}).first()
     time_since = r["heart_rate_data_since"]
     heart_rate_values = user.heart_rate_data
-
     new_time_since = datetime.datetime.fromisoformat(time_since).timestamp()
 
     return avg_hr_specified(new_time_since, heart_rate_values)
