@@ -4,6 +4,7 @@ from database import Patient
 from database import ValidationError
 from database import validate_patient
 
+
 app = Flask(__name__)
 
 
@@ -22,7 +23,7 @@ def add_patient():
     except ValidationError as inst:
         return jsonify({"message": inst.exception}), 500
 
-    p = Patient(user_id=r['user_id'], attending_email=r['attending_email'], user_age=r['user_age'])
+    p = Patient(user_id=r["user_id"], attending_email=r["attending_email"], user_age=r["user_age"])
     p.save()
 
     result = {
@@ -34,12 +35,17 @@ def add_patient():
 
 @app.route("/api/heart_rate", methods=["POST"])
 def add_heart_rate():
+    import time
+
     connect("mongodb://oliviagwynn1:GODUKE10@ds157503.mlab.com:57503/bme590")
     r = request.get_json()
 
+    t = time.time()
+
     id_user = Patient.objects.raw({"_id": r["user_id"]})
+    data = [{"hr": hr, "time": t} for hr in r["heart_rate"]]
     id_user.update(
-        {"$push": {"heart_rate": {"$each": r["heart_rate"]}}}
+        {"$push": {"heart_rate_data": {"$each": data}}}
     )
 
     result = {
@@ -55,7 +61,7 @@ def list_heart_rates(user_id):
     user_id = int(user_id)
     user = Patient.objects.raw({"_id": user_id}).first()
 
-    return jsonify(user.heart_rate)
+    return jsonify(user.heart_rate_data)
 
 
 if __name__ == "__main__":
