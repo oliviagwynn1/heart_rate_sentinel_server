@@ -6,6 +6,7 @@ from database import validate_patient
 
 app = Flask(__name__)
 
+
 @app.route("/")
 def server_on():
     return "hello!"
@@ -38,7 +39,7 @@ def add_heart_rate():
 
     id_user = Patient.objects.raw({"_id": r["user_id"]})
     id_user.update(
-        {"$push": {"heart_rate": r["heart_rate"]}}
+        {"$push": {"heart_rate": {"$each": r["heart_rate"]}}}
     )
 
     result = {
@@ -57,9 +58,8 @@ def list_heart_rates(user_id):
     return jsonify(user.heart_rate)
 
 
-
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5001)
 
 
-#   r2 = requests.post("http://127.0.0.1:5000/api/new_patient", json={"user_id": 2,"attending_email": "olivia.gwynn@duke.edu","user_age": 21})
+#   r2 = requests.post("http://127.0.0.1:5000/api/new_patient", json={"user_id": 1,"attending_email": "olivia.gwynn@duke.edu","user_age": 21})
