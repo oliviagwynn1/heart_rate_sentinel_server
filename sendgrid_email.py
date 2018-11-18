@@ -1,15 +1,28 @@
-import sendgrid
-import os
 from sendgrid.helpers.mail import *
 
 
-sg = sendgrid.SendGridAPIClient(apikey=os.environ.get('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'))
-from_email = Email("livigwynn_5_@hotmail.co.uk")
-to_email = Email("olivia.gwynn@duke.edu")
-subject = "Sending with SendGrid is Fun"
-content = Content("text/plain", "and easy to do anywhere, even with Python")
-mail = Mail(from_email, subject, to_email, content)
-response = sg.client.mail.send.post(request_body=mail.get())
-print(response.status_code)
-print(response.body)
-print(response.headers)
+def send_email(attending_email):
+    """This function sends an email to a patient.
+
+    The function utilizes the SendGrid delivery service to send an email
+    to the attending_email. The contents and subject of the email are
+    specified in the subject and content variables.
+
+    :param attending_email:
+    :type attending_email: str
+    """
+
+    import sendgrid
+    import os
+
+    sg = sendgrid.SendGridAPIClient(apikey=os.environ.get('SENDGRID_API_KEY'))
+
+    from_email = Email("olivia.gwynn@duke.edu")
+    to_email = Email(attending_email)
+    subject = "Tachycardic Results"
+    content = Content("Unfortunately you have Tachycardia. I am very sorry!")
+    mail = Mail(from_email, subject, to_email, content)
+    response = sg.client.mail.send.post(request_body=mail.get())
+    print(response.status_code)
+    print(response.body)
+    print(response.headers)
