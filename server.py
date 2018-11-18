@@ -1,5 +1,5 @@
-import logging
-from logging import config
+# import logging
+# from logging import config
 from flask import Flask, jsonify, request
 from pymodm import connect
 from database import Patient
@@ -28,7 +28,7 @@ def add_patient():
     :rtype: str
     """
 
-    logging.config.fileConfig('logger_config.ini', disable_existing_loggers=False)
+    # logging.config.fileConfig('logger_config.ini', disable_existing_loggers=False)
     connect("mongodb://oliviagwynn1:GODUKE10@ds157503.mlab.com:57503/bme590")
     r = request.get_json()  # parses the POST request body as JSON
 
@@ -46,7 +46,7 @@ def add_patient():
     result = {
         "message": "Added patient {0} successfully to the patient list".format(
             request.json["user_id"])}
-    logging.info(result)
+    # logging.info(result)
 
     return jsonify(result)
 
@@ -75,7 +75,7 @@ def add_heart_rate():
 
     import time
 
-    logging.config.fileConfig('logger_config.ini', disable_existing_loggers=False)
+    # logging.config.fileConfig('logger_config.ini', disable_existing_loggers=False)
     connect("mongodb://oliviagwynn1:GODUKE10@ds157503.mlab.com:57503/bme590")
     r = request.get_json()
 
@@ -90,7 +90,7 @@ def add_heart_rate():
     result = {
         "message": "Added patient {0} heart rate successfully to the patient list".format(
             request.json["user_id"])}
-    logging.info(result)
+    # logging.info(result)
 
     return jsonify(result)
 
@@ -143,7 +143,7 @@ def is_tachycardic(user_id):
     from tachy_conditions import tachycardic_conditions
     from sendgrid_email import send_email
 
-    logging.config.fileConfig('logger_config.ini', disable_existing_loggers=False)
+    # logging.config.fileConfig('logger_config.ini', disable_existing_loggers=False)
     connect("mongodb://oliviagwynn1:GODUKE10@ds157503.mlab.com:57503/bme590")
     user_id = int(user_id)
 
@@ -155,10 +155,10 @@ def is_tachycardic(user_id):
     result = tachycardic_conditions(age, last_heart_rate)
     if result is True:
         send_email(attending_email)
-        logging.info("Patient {} is Tachycardic.".format(user_id))
+        # logging.info("Patient {} is Tachycardic.".format(user_id))
         return jsonify("Patient {} is Tachycardic.".format(user_id))
     else:
-        logging.info("Patient {} is not Tachycardic.".format(user_id))
+        # logging.info("Patient {} is not Tachycardic.".format(user_id))
         return jsonify("Patient {} is not Tachycardic.".format(user_id))
 
 
@@ -232,4 +232,4 @@ def interval_avg():
 
 if __name__ == "__main__":
     # app.run(host="vcm-7433.vm.duke.edu", port=5000)
-    app.run(host="127.0.0.1", port=5000)
+    app.run(host="127.0.0.1", port=5002)
