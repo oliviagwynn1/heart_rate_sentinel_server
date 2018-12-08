@@ -3,7 +3,7 @@ from pymodm import MongoModel, fields
 
 class Patient(MongoModel):
 
-    user_id = fields.IntegerField(primary_key=True)
+    patient_id = fields.IntegerField(primary_key=True)
     attending_email = fields.EmailField()
     user_age = fields.IntegerField()
     heart_rate_data = fields.ListField()

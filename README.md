@@ -1,7 +1,7 @@
 # heart_rate_sentinel_server
 
 This code works by sending 'requests.get' or 'requests.post' to 
-the server. The user can post patient information (user_id, 
+the server. The user can post patient information (patient_id, 
 attending_email, user_age) to the server that stores the data 
 into a Mongo database. The user can then post heart rate data
 to the server along with the user_id, to add heart rate data 
